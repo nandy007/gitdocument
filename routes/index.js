@@ -39,7 +39,7 @@ exports.index = function(req , res){
 };
 
 exports.about = function(req , res){
-    var aboutPath = path.join(global.rootPath, 'public/about.md');
+    var aboutPath = path.join(global.rootPath, 'README.md');
     fs.readFile(aboutPath, 'utf-8', function(err, file){
         res.render('about.html',{file:err?'':marked(file)});
     });
