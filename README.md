@@ -26,9 +26,9 @@
 
 > md文件中引用的图片也需放置到docs目录中，使用相对路径引用
 
-> 需要配置一个webhook为http://gitdocument.exmobi.cn/receiveWebHooks
+> 需要配置一个webhook为https://gitdocument.exmobi.cn/receiveWebHooks
 
-当你的全部配置好，并且我们已经在后台把你的资源克隆进来，可以通过 http://gitdocument.exmobi.cn/[目录名]/index.html 来访问你的文档。
+当你的全部配置好，并且我们已经在后台把你的资源克隆进来，可以通过 https://gitdocument.exmobi.cn/[目录名]/index.html 来访问你的文档。
 
 ## 方式二：
 
