@@ -66,15 +66,26 @@ exports.init = function(opts){
             global.config.isInit = true;
         });
     }else{
-        exec("cd "+basePath+" && mkdir " + cacheCategory, function(err, stdout, stderr) {
-            if(err){
-                console.log(arguments);
-            }else{
-                initDateCache(function(){
-                    global.config.isInit = true;
-                });
-            }
-        });
+        var forInit = function(){
+            exec("cd "+basePath+" && mkdir " + cacheCategory, function(err, stdout, stderr) {
+                if(err){
+                    console.log(arguments);
+                }else{
+                    initDateCache(function(){
+                        global.config.isInit = true;
+                    });
+                }
+            });
+        };
+        var $basePath = path.join(global.rootPath, basePath);
+        if(fs.existsSync($basePath)){
+            forInit();
+        }else{
+            fs.mkdir($basePath, function(err){
+                if(!err) forInit();
+            });
+        }
+
     }
 };
 
