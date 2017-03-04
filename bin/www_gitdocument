@@ -1,0 +1,9 @@
+var http = require('http');
+var app = require('../app');
+
+app.set('port', process.env.PORT || '7700');
+//子进程监听端口
+http.createServer(app).listen(app.get('port'), function(){
+    console.log("Listening on port " + app.get('port'));
+});
+
