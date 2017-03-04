@@ -3,6 +3,8 @@ exports.set = function(app){
 
     var docs  = require(global.rootPath+'/routes/index');
 
+    app.get('/',docs.index);
+
     app.get('/index.html',docs.index);
 
     app.get('/about.html',docs.about);

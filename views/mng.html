@@ -23,7 +23,7 @@
                             success : function(data){
                                 $('#addModal').modal('toggle');
                                 obj.clearForm(obj.forms);
-                                location.href = "mng.html";
+                                location.href = location.href;
                             },
                             error : function(){
 
@@ -44,7 +44,7 @@
                     showList : __list.length,
                     doDel : function(git_id){
                         $.get('delGit?git_id='+git_id, function(data){
-                            location.href = "mng.html";
+                            location.href = location.href;
                         });
                     },
                     showDoc : function(git_id){
