@@ -87,7 +87,7 @@
     <div class="panel panel-default">
     <%
     var fileName = file.fileName, title = '';
-    var indexContains = indexes.contains;
+    var indexContains = indexes.contains||[];
     %>
     <%
     for(var i=0, ilen=indexContains.length;i<ilen;i++){
