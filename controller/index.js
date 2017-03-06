@@ -1,4 +1,29 @@
 
+var getPSW = function(url){
+    var psw = '';
+    url.replace(/mng([^\.]*)\.html/, function(s, s1){
+        psw = s1||'';
+    });
+    return psw;
+};
+
+var validate = function(psw){
+    return psw===global.config.password;
+};
+
+var send = function(res){
+    res.send('Are you kidding me?');
+};
+
+var filter = function(req, res, next){
+    var psw = getPSW(req.url)||getPSW(req.headers.referer||'');
+    if(validate(psw)){
+        next();
+    }else{
+        send(res);
+    }
+};
+
 exports.set = function(app){
 
     var docs  = require(global.rootPath+'/routes/index');
@@ -9,13 +34,11 @@ exports.set = function(app){
 
     app.get('/about.html',docs.about);
 
-    app.get('/mng(:psw)?.html',docs.mng);
+    app.get('/mng(:psw)?.html', filter, docs.mng);
 
-    app.post('/saveGit',docs.saveGit);
+    app.post('/saveGit', filter, docs.saveGit);
 
-    app.post('/savePsw',docs.savePsw);
-
-    app.get('/delGit',docs.delGit);
+    app.get('/delGit', filter, docs.delGit);
 
     app.post('/receiveWebHooks',docs.receiveWebHooks);
 

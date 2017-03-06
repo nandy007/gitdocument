@@ -46,11 +46,6 @@ exports.about = function(req , res){
 };
 
 exports.mng = function(req , res){
-    var psw = (req.params||{}).psw||'';
-    if(psw!=global.config.password){
-        res.send('Are you kidding me?');
-        return;
-    }
     gitdata.getList(function(list){
         res.render('mng.html',{list:list});
     });
