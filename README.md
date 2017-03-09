@@ -36,7 +36,7 @@
 
 第一步：
 
-> git clone https://github.com/nandy007/gitdocument.git
+> git clone https://github.com/nandy007/gitdocument.git ./gitdocument
 
 第二步：
 
