@@ -1,6 +1,6 @@
 <code>gitdocument</code>是一个将git资源转换为html页面通过层级结构展示文档的一个开源服务，开源地址为[https://github.com/nandy007/gitdocument](https://github.com/nandy007/gitdocument)。
 
-使用文档用户可以fork相应的git资源，在使用中发现文档中的错误可以进行修改并进行<code>pull requests</code>操作，实现文档的共享管理。
+读者可以fork相应的git资源，在使用中发现文档中的错误可以进行修改并进行<code>pull requests</code>操作，实现文档的共享管理。
 
 # 服务使用
 
