@@ -57,6 +57,15 @@
 
             $('#controller').render(obj);
 
+            $('#content a[href^="#"]').on('click', function(){
+                try{
+                    var top = $($(this).attr('href')).offset().top-100;
+                    $('body').animate({scrollTop:top}, 'slow');
+                }catch(e){}
+
+                return false;
+            });
+
         });
     </script>
 </head>
