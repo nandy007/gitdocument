@@ -22,7 +22,7 @@
 
 > 根目录下存放一个indexes.json文件，描述文档的层级结构，最多两级，格式可参考：[示例](https://github.com/nandy007/agile-vm/blob/master/docs/indexes.json)
 
-> 所有文档格式为md格式，要求符合markdown规范，md文件内容中#开头的标题会选数量最少的作为页面显示的目录，如果不需要作为目录显示请直接使用html标签
+> 所有文档格式为md格式，要求符合markdown规范，md文件内容中如果需要将h标题显示为导航目录，请使用标签并设置id
 
 > md文件中引用的图片也需放置到docs目录中，使用相对路径引用
 

@@ -18,12 +18,15 @@ renderer.table = function (header, body) {
     return '<table class="'+tableCss+'">'+header+body+'</table>';
 };
 
-renderer.heading = function (text, level) {
+/*renderer.heading = function (text, level) {
     return '<h'+level+' data-category="">'+text+'</h'+level+'>';
-};
+};*/
 
 var markedFilter = function(str){
-    str = marked(str).replace(/\<table\>/g, '<table class="'+tableCss+'">');
+    str = marked(str.replace(/(<h[^>]*id\=[^>]*)>/g, function(s, s1){
+        if(s.indexOf('data-category')>-1) return s;
+        return s1+' data-category=""'+'>';
+    })).replace(/\<table\>/g, '<table class="'+tableCss+'">');
     return str;
 };
 
