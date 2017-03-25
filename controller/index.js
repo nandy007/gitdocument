@@ -42,6 +42,8 @@ exports.set = function(app){
 
     app.post('/receiveWebHooks',docs.receiveWebHooks);
 
+    app.get('/(:category)/search.html',docs.search);
+
     app.get('/(:category)/(:name).html',docs.showDocs);
 
     app.get('/(:category)/(*)',docs.showOthers);

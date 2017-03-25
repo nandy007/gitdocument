@@ -15,6 +15,7 @@ var express = require('express')
 
 global.rootPath = __dirname;
 global.config = require('./config/config.json');
+global.categoryCache = {};
 
 var app = express();
 
