@@ -168,6 +168,10 @@ exports.search = function (req, res) {
             return getCategoryList(categoryContent, docsPath);
         });
     var arr = [];
+    if(k===''){
+        res.render('search.html', { list: arr, k: k, item: item });
+        return;
+    }
     for (var i in categoryList) {
         var content = categoryList[i].content||'',
             flag = true;
