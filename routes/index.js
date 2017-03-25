@@ -186,6 +186,7 @@ exports.search = function (req, res) {
 };
 
 exports.showDocs = function (req, res) {
+    var k = (req.query.k || '').trim();
     var category = req.params.category, name = req.params.name;
     var gitPath = gitdata.getGitPath(category), docsPath = gitPath + '/docs';
     var item = gitdata.getItem(category);
@@ -222,7 +223,7 @@ exports.showDocs = function (req, res) {
         }
     ],
         function (err, results) {
-            res.render('docs.html', { indexes: results[0], file: results[1], item: item, k: '' });
+            res.render('docs.html', { indexes: results[0], file: results[1], item: item, k: k });
         });
 };
 

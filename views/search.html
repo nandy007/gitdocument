@@ -61,7 +61,7 @@
     for(var i=0,l=(list||[]).length;i< l;i++){
     %>
     <li>
-        <a href="<%=list[i].mdlink%>.html">
+        <a href="<%=list[i].mdlink%>.html?k=<%-k%>">
             <%-list[i].subject%>
             <p><%-list[i].groups.join('-')%></p>
         </a>

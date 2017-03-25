@@ -25,6 +25,7 @@
         #gotop{ display: block;width: 45px;height: 45px; background: url("/img/arrow_top.jpg") no-repeat;margin-top:10px;}
         #gotop:hover{ display: block;width: 45px;height: 45px; background: url("/img/arrow_top_on.jpg") no-repeat;}
 
+        .kw {background: yellow;}
     </style>
     <script>
         $(function(){
@@ -65,6 +66,27 @@
 
                 return false;
             });
+
+            var kw = ($('input[name="k"]').val()||'').trim();
+            if(kw!=''){
+                var kws = kw.split(' ');
+                $.each(kws, function(i, k){
+                    kws[i] = new RegExp(kws[i], 'g');
+                });
+                $('#content p').each(function(){
+                    var $this = $(this);
+                    var content = $this.html();
+                    $.each(kws, function(i, k){
+                        if(kws[i].test(content)){
+                            content = content.replace(kws[i], function(s){
+                                return '<font class="kw">'+s+'</font>';
+                            });
+                        }
+                    });
+                    $this.html(content);
+                });
+            }
+            
 
         });
     </script>
