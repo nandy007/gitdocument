@@ -65,28 +65,7 @@
                 }catch(e){}
 
                 return false;
-            });
-
-            var kw = ($('input[name="k"]').val()||'').trim();
-            if(kw!=''){
-                var kws = kw.split(' ');
-                $.each(kws, function(i, k){
-                    kws[i] = new RegExp(kws[i], 'g');
-                });
-                $('#content p').each(function(){
-                    var $this = $(this);
-                    var content = $this.html();
-                    $.each(kws, function(i, k){
-                        if(kws[i].test(content)){
-                            content = content.replace(kws[i], function(s){
-                                return '<font class="kw">'+s+'</font>';
-                            });
-                        }
-                    });
-                    $this.html(content);
-                });
-            }
-            
+            });    
 
         });
     </script>
@@ -155,7 +134,7 @@
         var docPaths = item.url.split('.');
         docPaths.pop();
         %>
-        当前文档：《<a href="index.html"><%=item.title%></a>》  <a href="<%=docPaths.join('.')+'/blob/master/docs/'+fileName+'.md'%>" style="color: #d44950;" target="_blank">我要修改这篇文章</a>
+        当前文档：《<a href="index.html"><%=item.title%></a>》  <a href="<%=docPaths.join('.')+'/blob/master/docs/'+fileName+'.md'%>" style="color: #d44950;" target="_blank">我要修改这篇文章</a><%if(k){%>　<a href="<%-fileName%>.html" style="color: #50a14f;">取消关键字高亮</a><%}%>
     </p>
     <%-file.content%>
     </div>

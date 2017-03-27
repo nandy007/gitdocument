@@ -6,10 +6,16 @@ var fs = require("fs"),
 
 var renderer = new marked.Renderer(), highlightjs = require(global.rootPath + '/utils/highlight');
 renderer.code = function (code, language) {
+    code = code.replace(/<font class="kw">(((?!<\/font>).)*)<\/font>/g, function(s, s1){  
+        return '__$$$'+s1+'$$$__';
+    });
     // Check whether the given language is valid for highlight.js.
     var validLang = !!(language && highlightjs.getLanguage(language));
     // Highlight only if the language is valid.
     var highlighted = validLang ? highlightjs.highlight(language, code).value : code;
+    highlighted = highlighted.replace(/__\$\$\$(((?!\$\$\$__).)*)\$\$\$__/g, function(s, s1){
+        return '<font class="kw">'+s1+'</font>';
+    });
     // Render the highlighted code with `hljs` class.
     return '<pre><code class="hljs ' + language + '">' + highlighted + '</code></pre>';
 };
@@ -28,6 +34,18 @@ var markedFilter = function (str) {
         return s1 + ' data-category=""' + '>';
     })).replace(/\<table\>/g, '<table class="' + tableCss + '">');
     return str;
+};
+
+var keywordHighlight = function(k, file){
+    if(k==='') return file;
+    var kws = k.split(' ');
+    for(var i=0,l=kws.length;i<l;i++){
+        var reg = new RegExp(kws[i], 'g');
+        file = file.replace(reg, function(s){
+            return '<font class="kw">'+s+'</font>';
+        });
+    }
+    return file;
 };
 
 
@@ -218,7 +236,7 @@ exports.showDocs = function (req, res) {
             }
             var docPath = path.join(global.rootPath, docsPath + '/' + name + '.md');
             fs.readFile(docPath, 'utf-8', function (err, file) {
-                file = err ? "" : markedFilter(file);
+                file = err ? "" : markedFilter(keywordHighlight(k, file));
                 callback(null, {
                     fileName: name,
                     content: file
