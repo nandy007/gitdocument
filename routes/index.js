@@ -162,12 +162,26 @@ var getCategoryList = function (categoryContent, docsPath, groups, rs) {
     }
     return rs;
 };
+var validateCategoryCache = function(){
+    
+    var maxCache = global.config.maxCache||10,
+        categoryCache = global.categoryCache,
+        num = 0,
+        tempCategory;
+    for(var k in categoryCache){
+        if((num++)===0) tempCategory = k;
+    }
+    if(num>=maxCache){ 
+        delete global.categoryCache[tempCategory];
+    }
+};
 
 var getCategoryCache = function (category, getter) {
     var categoryCache = global.categoryCache[category];
     var date = new Date().getTime();
     var gap = 604800000;
     if (!categoryCache || (date - categoryCache.date) > gap) {
+        validateCategoryCache();
         categoryCache = global.categoryCache[category] = getter();
     }
     return categoryCache;

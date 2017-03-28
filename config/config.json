@@ -2,5 +2,6 @@
     "category" : "mygitdocument",
     "isInit" : false,
     "basePath" : "../gits",
-    "password" : ""
+    "password" : "",
+    "maxCache" : 10
 }
