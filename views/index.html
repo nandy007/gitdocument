@@ -49,6 +49,13 @@
 </nav>
 
 <div class="container" style="margin-top:100px;" id="container">
+    <%
+    if(list.length===0){
+    %>
+    <p>非常抱歉，没有找到任何文档</p>
+    <%
+    }
+    %>
     <ul>
     <%
     for(var i=0,len=list.length;i<len;i++){
