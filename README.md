@@ -2,6 +2,10 @@
 
 读者可以fork相应的git资源，在使用中发现文档中的错误可以进行修改并进行<code>pull requests</code>操作，实现文档的共享管理。
 
+# 效果
+
+请访问[https://gitdocument.exmobi.cn/](https://gitdocument.exmobi.cn/)查看
+
 # 服务使用
 
 有两种方式使用：
