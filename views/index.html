@@ -6,16 +6,15 @@
     <script src="js/agile.vm.browser.js"></script>
     <%=include include.html%>
     <style>
-        #container ul,#container li{list-style: none;margin:0;padding:0;}
-        #container ul{width:100%;display:flex; justify-content: center; flex-direction: row; flex-wrap: wrap;}
-        #container li{width:260px;height:200px;text-align: center;margin:10px;}
-        #container li a{background-color: #00193A;height:100%;display: block;color: #ffffff;font-size: 20px;line-height: 180px;text-decoration: none;}
-        #container li a:hover{background-color: #002949;}
+        @media screen and (min-width: 640px) {
+            #container ul,#container li{list-style: none;margin:0;padding:0;}
+            #container ul{width:100%;display:flex; justify-content: center; flex-direction: row; flex-wrap: wrap;}
+            #container li{width:260px;height:200px;text-align: center;margin:10px;}
+            #container li a{background-color: #00193A;height:100%;display: block;color: #ffffff;font-size: 20px;line-height: 180px;text-decoration: none;}
+            #container li a:hover{background-color: #002949;}
+        }
         @media screen and (max-width: 640px) {
             #container{margin-top:70px !important;}
-            #container li{width:100%;height:auto;margin:6px 0px;}
-            #container li a{background-color: #ececec;color:#333333;line-height:normal;font-size: 16px;text-align: left;padding:10px 10px;border:1px solid #ccc;border-radius: 8px;}
-            #container li a:hover{background-color: #e0e0e0;}
         }
     </style>
 </head>
@@ -56,11 +55,11 @@
     <%
     }
     %>
-    <ul>
+    <ul class="list-group">
     <%
     for(var i=0,len=list.length;i<len;i++){
     %>
-        <li><a href="./<%=list[i].category%>/index.html" target="_blank"><%=list[i].title%></a></li>
+        <li class="list-group-item"><a href="./<%=list[i].category%>/index.html" target="_blank"><%=list[i].title%></a></li>
     <%
     }
     %>
