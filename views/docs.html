@@ -220,6 +220,7 @@
     var lastInfo;
     var nextInfo;
     var firstInfo;
+    var isReadme = true;
     %>
                     <%
     for(var i=0, ilen=indexContains.length;i<ilen;i++){
@@ -238,6 +239,7 @@
                 isActive = true;
                 lastInfo = contentContains[j-1]||((indexContains[i-1]||{}).contains||[]).pop();
                 nextInfo = contentContains[j+1]||((indexContains[i+1]||{}).contains||[]).shift();
+                if(isReadme) isReadme = false;
             }
             if(i===0&&j===0){
                 firstInfo = contentContains[j];
@@ -269,6 +271,7 @@
             <%-file.content%>
             <div>
                 <ul class="section-nav">
+                    <%console.log(isReadme);%>
                     <%if(lastInfo){%>
                     <li>上一节：<a href="<%-lastInfo.mdlink%>.html"><%-lastInfo.subject%></a></li>
                     <%}else if(nextInfo){%>
@@ -276,7 +279,7 @@
                     <%}%>
                     <%if(nextInfo){%>
                     <li>下一节：<a href="<%-nextInfo.mdlink%>.html"><%-nextInfo.subject%></a></li>
-                    <%}else if(firstInfo){%>
+                    <%}else if(firstInfo&&isReadme){%>
                     <li>下一节：<a href="<%-firstInfo.mdlink%>.html"><%-firstInfo.subject%></a></li>
                     <%}%>
                 </ul>
