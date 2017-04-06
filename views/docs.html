@@ -116,6 +116,10 @@
             .kw {
                 background: yellow;
             }
+
+            .section-nav, .section-nav *{list-style: none;padding:0;margin:0;}
+            .section-nav{margin: 40px 0px;}
+            .section-nav li{line-height: 30px; display: inline;margin-right: 30px;}
             
             @media screen and (max-width: 640px) {
                 #container {
@@ -125,6 +129,7 @@
                 }
                 #controller, .nav-mdf{display: none;}
                 .sidebar-offcanvas{width:100%;}
+                .section-nav li{display: block;}
             }
             
             
@@ -212,6 +217,9 @@
                 <%
     var fileName = file.fileName, title = '';
     var indexContains = indexes.contains||[];
+    var lastInfo;
+    var nextInfo;
+    var firstInfo;
     %>
                     <%
     for(var i=0, ilen=indexContains.length;i<ilen;i++){
@@ -228,6 +236,11 @@
             if(fileName===contentContains[j].mdlink){
                 title = contentContains[j].subject;
                 isActive = true;
+                lastInfo = contentContains[j-1]||((indexContains[i-1]||{}).contains||[]).pop();
+                nextInfo = contentContains[j+1]||((indexContains[i+1]||{}).contains||[]).shift();
+            }
+            if(i===0&&j===0){
+                firstInfo = contentContains[j];
             }
         %>
                                 <li class="list-group-item">
@@ -254,7 +267,22 @@
                         <%}%>
             </p>
             <%-file.content%>
+            <div>
+                <ul class="section-nav">
+                    <%if(lastInfo){%>
+                    <li>上一节：<a href="<%-lastInfo.mdlink%>.html"><%-lastInfo.subject%></a></li>
+                    <%}else if(nextInfo){%>
+                    <li>上一节：<a href="index.html">文档说明</a></li>
+                    <%}%>
+                    <%if(nextInfo){%>
+                    <li>下一节：<a href="<%-nextInfo.mdlink%>.html"><%-nextInfo.subject%></a></li>
+                    <%}else if(firstInfo){%>
+                    <li>下一节：<a href="<%-firstInfo.mdlink%>.html"><%-firstInfo.subject%></a></li>
+                    <%}%>
+                </ul>
+            </div>
         </div>
+        
     </div>
     <!-- /.container -->
 
