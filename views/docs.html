@@ -237,8 +237,8 @@
             if(fileName===contentContains[j].mdlink){
                 title = contentContains[j].subject;
                 isActive = true;
-                lastInfo = contentContains[j-1]||((indexContains[i-1]||{}).contains||[]).pop();
-                nextInfo = contentContains[j+1]||((indexContains[i+1]||{}).contains||[]).shift();
+                lastInfo = contentContains[j-1]||Array.prototype.slice.call(((indexContains[i-1]||{}).contains||[]), 0).pop();
+                nextInfo = contentContains[j+1]||Array.prototype.slice.call(((indexContains[i+1]||{}).contains||[]), 0).shift();
                 if(isReadme) isReadme = false;
             }
             if(i===0&&j===0){
@@ -271,7 +271,6 @@
             <%-file.content%>
             <div>
                 <ul class="section-nav">
-                    <%console.log(isReadme);%>
                     <%if(lastInfo){%>
                     <li>上一节：<a href="<%-lastInfo.mdlink%>.html"><%-lastInfo.subject%></a></li>
                     <%}else if(nextInfo){%>
