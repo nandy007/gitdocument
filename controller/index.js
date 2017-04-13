@@ -44,6 +44,8 @@ exports.set = function(app){
 
     app.get('/(:category)/search.html',docs.search);
 
+    app.get('/(:category)/showImg.html',docs.showImg);
+
     app.get('/(:category)/(:name).html',docs.showDocs);
 
     app.get('/(:category)/(*)',docs.showOthers);

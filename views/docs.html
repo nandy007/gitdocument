@@ -120,6 +120,8 @@
             .section-nav, .section-nav *{list-style: none;padding:0;margin:0;}
             .section-nav{margin: 40px 0px;}
             .section-nav li{line-height: 30px; display: inline;margin-right: 30px;}
+
+            #filecontent img{cursor: pointer;}
             
             @media screen and (max-width: 640px) {
                 #container {
@@ -172,6 +174,10 @@
                     } catch (e) { }
 
                     return false;
+                });
+
+                $('#filecontent img').on('click', function(){
+                    window.open('showImg.html?img='+escape(this.src), '_blank');
                 });
 
             });
@@ -268,7 +274,9 @@
                     <%if(k){%>　<a href="<%-fileName%>.html" style="color: #50a14f;">取消关键字高亮</a>
                         <%}%>
             </p>
+            <div id="filecontent">
             <%-file.content%>
+            </div>
             <div>
                 <ul class="section-nav">
                     <%if(lastInfo){%>

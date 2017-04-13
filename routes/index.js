@@ -221,6 +221,11 @@ exports.search = function (req, res) {
     res.render('search.html', { list: arr, k: k, item: item });
 };
 
+exports.showImg = function(req, res){
+    var img = req.query.img;
+    res.render('showImg.html', { img: img });
+};
+
 exports.showDocs = function (req, res) {
     var k = (req.query.k || '').trim();
     var category = req.params.category, name = req.params.name;
