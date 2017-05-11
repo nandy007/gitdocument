@@ -12,7 +12,7 @@
 
 ## 方式一：
 
-需要在gitdocument托管的作者可以将下列信息回复到gitdocument的wiki中[https://github.com/nandy007/gitdocument/wiki](https://github.com/nandy007/gitdocument/wiki)，我们会尽快进行处理。
+需要在gitdocument托管的作者可以将下列信息回复到gitdocument的issues中[https://github.com/nandy007/gitdocument/issues](https://github.com/nandy007/gitdocument/issues)，我们会尽快进行处理。
 
 回复信息格式：
 
