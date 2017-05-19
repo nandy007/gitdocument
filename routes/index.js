@@ -247,19 +247,11 @@ exports.source = function(req, res){
         res.redirect('/img/default-cover.png');
         return;
     }
-    fs.readFile(filePath, "binary", function (err, file) {
-        if (err) {
-            res.writeHead(500, { "Content-Type": "text/plain" });
-            res.write(err + "\n");
-            res.end();
-        } else {
-            var fileName = filePath.split(/\\\//).pop();
+    var readStream = fs.createReadStream(filePath);
+    var fileName = filePath.split(/\\\//).pop();
     var imgName = req.params.source;
-            res.setHeader("Content-Disposition", "attachment;filename=" + imgName + ";Content-Type:" + gitdata.mime.lookup(imgName));
-            res.write(file, "binary");
-            res.end();
-        }
-    });
+    res.setHeader("Content-Disposition", "attachment;filename=" + imgName + ";Content-Type:" + gitdata.mime.lookup(imgName));
+    readStream.pipe(res);
 };
 
 exports.showDocs = function (req, res) {
@@ -307,16 +299,15 @@ exports.showDocs = function (req, res) {
 exports.showOthers = function (req, res) {
     var category = req.params.category, file = req.params[0];
     var filePath = path.join(global.rootPath, gitdata.getGitPath(category) + '/docs/' + file);
-    fs.readFile(filePath, "binary", function (err, file) {
-        if (err) {
-            res.writeHead(500, { "Content-Type": "text/plain" });
-            res.write(err + "\n");
-            res.end();
-        } else {
-            var fileName = filePath.split(/\\\//).pop();
-            res.setHeader("Content-Disposition", "attachment;filename=" + fileName.replace('%40', '@') + ";Content-Type:" + gitdata.mime.lookup(fileName));
-            res.write(file, "binary");
-            res.end();
-        }
-    });
+    if(!fs.existsSync(filePath)){
+        res.writeHead(500, { "Content-Type": "text/plain" });
+        res.write(err + "\n");
+        res.end();
+        return;
+    }
+    
+    var readStream = fs.createReadStream(filePath);
+    var fileName = filePath.split(/\\\//).pop();
+    res.setHeader("Content-Disposition", "attachment;filename=" + fileName.replace('%40', '@') + ";Content-Type:" + gitdata.mime.lookup(fileName));
+    readStream.pipe(res);
 };
