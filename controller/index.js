@@ -1,3 +1,4 @@
+var multipart = require('connect-multiparty');
 
 var getPSW = function(url){
     var psw = '';
@@ -24,6 +25,11 @@ var filter = function(req, res, next){
     }
 };
 
+var bodyMulti = function(req, res, next){
+    var multipartMiddleware = multipart();
+    return multipartMiddleware(req, res, next);
+};
+
 exports.set = function(app){
 
     var docs  = require(global.rootPath+'/routes/index');
@@ -36,11 +42,13 @@ exports.set = function(app){
 
     app.get('/mng(:psw)?.html', filter, docs.mng);
 
-    app.post('/saveGit', filter, docs.saveGit);
+    app.post('/saveGit', filter, bodyMulti, docs.saveGit);
 
     app.get('/delGit', filter, docs.delGit);
 
     app.post('/receiveWebHooks',docs.receiveWebHooks);
+
+    app.get('/source/(:source)', docs.source);
 
     app.get('/(:category)/search.html',docs.search);
 

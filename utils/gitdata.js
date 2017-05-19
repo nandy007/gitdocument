@@ -67,7 +67,7 @@ exports.init = function(opts){
         });
     }else{
         var forInit = function(){
-            exec("cd "+basePath+" && mkdir " + cacheCategory, function(err, stdout, stderr) {
+            exec("cd "+basePath+" && mkdir " + cacheCategory + " && mkdir source", function(err, stdout, stderr) {
                 if(err){
                     console.log(arguments);
                 }else{

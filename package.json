@@ -27,6 +27,8 @@
         "serve-favicon": "2.2.0",
         "ejs" : "0.8.5",
         "async" : "0.2.9",
-        "marked" : "0.3.6"
+        "marked" : "0.3.6",
+        "connect-multiparty" : "1.2.5",
+        "fs.extra" : "1.2.1"
     }
 }

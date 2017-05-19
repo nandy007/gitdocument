@@ -1,4 +1,4 @@
-var fs = require("fs"),
+var fs = require("fs.extra"),
     async = require("async"),
     marked = require("marked"),
     path = require('path'),
@@ -99,6 +99,16 @@ exports.savePsw = function (req, res) {
 
 
 exports.saveGit = function (req, res) {
+    var coverPath = req.files&&req.files.cover.path;
+    var category = req.body.category;
+    if(!coverPath){
+        res.json({ result: 'error' });
+        return;
+    }
+    var filePath = path.join(global.rootPath, gitdata.getGitPath('source'), category+'.png');
+    fs.copy(coverPath, filePath, function(err){
+        fs.removeSync(coverPath);
+    });
     gitdata.saveGit(req.body, function (err, result) {
         if (err) {
             res.json({ result: 'error' });
@@ -224,6 +234,32 @@ exports.search = function (req, res) {
 exports.showImg = function(req, res){
     var img = req.query.img;
     res.render('showImg.html', { img: img });
+};
+
+exports.source = function(req, res){
+    var imgName = req.params.source;
+    if(!imgName){
+        res.redirect('/img/default-cover.png');
+        return;
+    }
+    var filePath = path.join(global.rootPath, gitdata.getGitPath('source'), imgName);
+    if(!fs.existsSync(filePath)){
+        res.redirect('/img/default-cover.png');
+        return;
+    }
+    fs.readFile(filePath, "binary", function (err, file) {
+        if (err) {
+            res.writeHead(500, { "Content-Type": "text/plain" });
+            res.write(err + "\n");
+            res.end();
+        } else {
+            var fileName = filePath.split(/\\\//).pop();
+    var imgName = req.params.source;
+            res.setHeader("Content-Disposition", "attachment;filename=" + imgName + ";Content-Type:" + gitdata.mime.lookup(imgName));
+            res.write(file, "binary");
+            res.end();
+        }
+    });
 };
 
 exports.showDocs = function (req, res) {
