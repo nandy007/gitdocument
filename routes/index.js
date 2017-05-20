@@ -48,7 +48,6 @@ var keywordHighlight = function(k, file){
     return file;
 };
 
-
 marked.setOptions({
     renderer: renderer
 });

@@ -298,6 +298,8 @@
     </div>
     <!-- /.container -->
 
+    <%=include copyright.html%>
+
     <ul id="controller" class="list-nav">
         <li><i class="line"></i><i class="dot-n t"></i></li>
         <li v-for="item in cs"><a v-on:click="goTo($index)"><i class="line"></i><span>{{item.title}}</span><i class="dot-s"></i></a></li>
