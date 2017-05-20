@@ -53,12 +53,17 @@ marked.setOptions({
     renderer: renderer
 });
 
+var formateRender = function(obj){
+    obj.config = global.config;
+    return obj;
+};
+
 exports.index = function (req, res) {
     var k = (req.query.k || '').trim();
     var kws = k.replace(/[ ]+/g, ' ').split(' ');
     gitdata.getList(function (list) {
         if (k === '') {
-            res.render('index.html', { list: list, k: k });
+            res.render('index.html', formateRender({ list: list, k: k }));
             return;
         }
         var arr = [];
@@ -74,26 +79,26 @@ exports.index = function (req, res) {
                 arr.push(li);
             }
         }
-        res.render('index.html', { list: arr, k: k });
+        res.render('index.html', formateRender({ list: arr, k: k }));
     });
 };
 
 exports.about = function (req, res) {
     var aboutPath = path.join(global.rootPath, 'README.md');
     fs.readFile(aboutPath, 'utf-8', function (err, file) {
-        res.render('about.html', { file: err ? '' : marked(file) });
+        res.render('about.html', formateRender({ file: err ? '' : marked(file) }));
     });
 };
 
 exports.mng = function (req, res) {
     gitdata.getList(function (list) {
-        res.render('mng.html', { list: list });
+        res.render('mng.html', formateRender({ list: list }));
     });
 };
 
 exports.savePsw = function (req, res) {
     gitdata.getList(function (list) {
-        res.render('mng.html', { list: list });
+        res.render('mng.html', formateRender({ list: list }));
     });
 };
 
@@ -211,7 +216,7 @@ exports.search = function (req, res) {
         });
     var arr = [];
     if(k===''){
-        res.render('search.html', { list: arr, k: k, item: item });
+        res.render('search.html', formateRender({ list: arr, k: k, item: item }));
         return;
     }
     for (var i in categoryList) {
@@ -228,12 +233,12 @@ exports.search = function (req, res) {
         }
     }
 
-    res.render('search.html', { list: arr, k: k, item: item });
+    res.render('search.html', formateRender({ list: arr, k: k, item: item }));
 };
 
 exports.showImg = function(req, res){
     var img = req.query.img;
-    res.render('showImg.html', { img: img });
+    res.render('showImg.html', formateRender({ img: img }));
 };
 
 exports.source = function(req, res){
@@ -292,7 +297,7 @@ exports.showDocs = function (req, res) {
         }
     ],
         function (err, results) {
-            res.render('docs.html', { indexes: results[0], file: results[1], item: item, k: k });
+            res.render('docs.html', formateRender({ indexes: results[0], file: results[1], item: item, k: k }));
         });
 };
 

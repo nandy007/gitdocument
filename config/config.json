@@ -3,5 +3,7 @@
     "isInit" : false,
     "basePath" : "../gits",
     "password" : "",
-    "maxCache" : 10
+    "maxCache" : 10,
+    "copyright" : "Copyright © 2017 南京烽火星空通信发展有限公司版权所有",
+    "url" : "https://www.exmobi.cn"
 }
