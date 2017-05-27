@@ -40,7 +40,9 @@ var keywordHighlight = function(k, file){
     if(k==='') return file;
     var kws = k.split(' ');
     for(var i=0,l=kws.length;i<l;i++){
-        var reg = new RegExp(kws[i].replace(/[\(\)\#\{\}\?\*\+]/g, '.'), 'g');
+        var reg = new RegExp(kws[i].replace(/[\(\)\#\{\}\?\*\+]/g, function(s){
+            return '\\'+s;
+        }), 'g');
         file = file.replace(reg, function(s){
             return '<font class="kw">'+s+'</font>';
         });
