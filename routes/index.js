@@ -256,7 +256,7 @@ exports.source = function(req, res){
     var readStream = fs.createReadStream(filePath);
     var fileName = filePath.split(/\\\//).pop();
     var imgName = req.params.source;
-    res.setHeader("Content-Type:" + gitdata.mime.lookup(imgName));
+    res.setHeader("Content-Disposition", "attachment;filename=" + imgName + ";Content-Type:" + gitdata.mime.lookup(imgName));
     readStream.pipe(res);
 };
 
