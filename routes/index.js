@@ -314,6 +314,6 @@ exports.showOthers = function (req, res) {
     
     var readStream = fs.createReadStream(filePath);
     var fileName = filePath.split(/\\\//).pop();
-    res.setHeader("Content-Type:" + gitdata.mime.lookup(fileName));
+    res.writeHead(200, { "Content-Type": gitdata.mime.lookup(fileName) });
     readStream.pipe(res);
 };
