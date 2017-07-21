@@ -304,13 +304,13 @@ exports.showDocs = function (req, res) {
 
 exports.showOthers = function (req, res) {
     var category = req.params.category, file = req.params[0];
-    var filePath = path.join(global.rootPath, gitdata.getGitPath(category) + '/docs/' + file);
+    /*var filePath = path.join(global.rootPath, gitdata.getGitPath(category) + '/docs/' + file);
     if(!fs.existsSync(filePath)){
         res.writeHead(500, { "Content-Type": "text/plain" });
         res.write(err + "\n");
         res.end();
         return;
-    }
+    }*/
     res.redirect('/'+category+'/docs/'+file);
     /*var readStream = fs.createReadStream(filePath);
     var fileName = filePath.split(/\\\//).pop();
