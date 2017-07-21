@@ -48,7 +48,7 @@ exports.set = function(app){
 
     app.post('/receiveWebHooks',docs.receiveWebHooks);
 
-    app.get('/source/(:source)', docs.source);
+    //app.get('/source/(:source)', docs.source);//改走static静态资源
 
     app.get('/(:category)/search.html',docs.search);
 

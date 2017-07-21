@@ -311,9 +311,9 @@ exports.showOthers = function (req, res) {
         res.end();
         return;
     }
-    
-    var readStream = fs.createReadStream(filePath);
+    res.redirect('/'+category+'/docs/'+file);
+    /*var readStream = fs.createReadStream(filePath);
     var fileName = filePath.split(/\\\//).pop();
     res.writeHead(200, { "Content-Type": gitdata.mime.lookup(fileName) });
-    readStream.pipe(res);
+    readStream.pipe(res);*/
 };

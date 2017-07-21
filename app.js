@@ -29,6 +29,7 @@ app.set('views', __dirname + '/views');
 //app.use(favicon(__dirname + '/../exmobi/public/images/favicon.ico'));
 
 app.use(express.static(path.join(__dirname, './public')));
+app.use(express.static(path.join(__dirname, global.config.basePath)));
 
 
 app.use(bodyParser.json({limit: '10mb'}));
