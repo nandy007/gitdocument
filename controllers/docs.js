@@ -1,10 +1,11 @@
-var fs = require("fs.extra"),
-    async = require("async"),
+
+
+var fs = require("fs-extra"),
     marked = require("marked"),
     path = require('path'),
-    gitdata = require(global.rootPath + '/utils/gitdata');
+    gitdata = require('../utils/gitdata');
 
-var renderer = new marked.Renderer(), highlightjs = require(global.rootPath + '/utils/highlight');
+var renderer = new marked.Renderer(), highlightjs = require('../utils/highlight');
 renderer.code = function (code, language) {
     code = code.replace(/<font class="kw">(((?!<\/font>).)*)<\/font>/g, function(s, s1){  
         return '__$$$'+s1+'$$$__';
@@ -59,85 +60,79 @@ var formateRender = function(obj){
     return obj;
 };
 
-exports.index = function (req, res) {
-    var k = (req.query.k || '').trim();
+exports.index = async function (ctx) {
+    
+    var k = (ctx.query.k || '').trim();
     var kws = k.replace(/[ ]+/g, ' ').split(' ');
-    gitdata.getList(function (list) {
-        if (k === '') {
-            res.render('index.html', formateRender({ list: list, k: k }));
-            return;
-        }
-        var arr = [];
-        for (var i = 0, l = (list || []).length; i < l; i++) {
-            var li = list[i], title = li.title.toLowerCase();
-            for (j = 0, len = kws.length; j < len; j++) {
-                if (title.indexOf(kws[j].toLowerCase()) < 0) {
-                    li = null;
-                    break;
-                }
-            }
-            if (li) {
-                arr.push(li);
+    const list = gitdata.getList();
+    if (k === '') {
+        await ctx.render('index', formateRender({ list: list, k: k }));
+        return;
+    }
+    var arr = [];
+    for (var i = 0, l = (list || []).length; i < l; i++) {
+        var li = list[i], title = li.title.toLowerCase();
+        for (j = 0, len = kws.length; j < len; j++) {
+            if (title.indexOf(kws[j].toLowerCase()) < 0) {
+                li = null;
+                break;
             }
         }
-        res.render('index.html', formateRender({ list: arr, k: k }));
-    });
+        if (li) {
+            arr.push(li);
+        }
+    }
+    await ctx.render('index', formateRender({ list: arr, k: k }));
 };
 
-exports.about = function (req, res) {
+exports.about = async function (ctx) {
     var aboutPath = path.join(global.rootPath, 'README.md');
-    fs.readFile(aboutPath, 'utf-8', function (err, file) {
-        res.render('about.html', formateRender({ file: err ? '' : marked(file) }));
-    });
+    const file = fs.readFileSync(aboutPath, 'utf-8');
+    await ctx.render('about', formateRender({ file: file?marked(file):'' }));
 };
 
-exports.mng = function (req, res) {
-    gitdata.getList(function (list) {
-        res.render('mng.html', formateRender({ list: list }));
-    });
+exports.mng = async function (ctx) {
+    const list = gitdata.getList();
+    await ctx.render('mng', formateRender({ list: list }));
 };
 
-exports.savePsw = function (req, res) {
-    gitdata.getList(function (list) {
-        res.render('mng.html', formateRender({ list: list }));
-    });
+exports.savePsw = async function (ctx) {
+    const list = gitdata.getList();
+    await ctx.render('mng', formateRender({ list: list }));
 };
 
 
-exports.saveGit = function (req, res) {
-    var coverPath = req.files&&req.files.cover.path;
-    var category = req.body.category;
+exports.saveGit = async function (ctx) {
+    const filesObj = ctx.request.filesObj || {};
+    var coverPath = (filesObj.cover || {}).path;
+    var category = ctx.request.body.category;
     if(!coverPath){
-        res.json({ result: 'error' });
+        ctx.body = { result: 'error' };
         return;
     }
     var filePath = path.join(global.rootPath, gitdata.getGitPath('source'), category+'.png');
-    fs.copy(coverPath, filePath, function(err){
-        fs.removeSync(coverPath);
-    });
-    gitdata.saveGit(req.body, function (err, result) {
-        if (err) {
-            res.json({ result: 'error' });
-        } else {
-            res.json({ result: 'success' });
-        }
-    });
+    fs.copyFileSync(coverPath, filePath);
+    const rs = await gitdata.saveGit(ctx.request.body);
+    if(rs){
+        ctx.body = { result: 'error' };
+    }else{
+        ctx.body = { result: 'success' };
+    }
 };
 
-exports.delGit = function (req, res) {
-    var gitId = req.query.git_id;
-    gitdata.delGit(gitId, function (err) {
-        if (err) {
-            res.json({ result: 'error' });
-        } else {
-            res.json({ result: 'success' });
-        }
-    });
+exports.delGit = async function (ctx) {
+    var gitId = ctx.query.git_id;
+    const rs = gitdata.delGit(gitId);
+    if(rs){
+        ctx.body = { result: 'error' };
+    }else{
+        ctx.body = { result: 'success' };
+    }
 };
 
-exports.receiveWebHooks = function (req, res) {
+exports.receiveWebHooks = function (ctx) {
     //console.log(JSON.stringify(req.body));
-    var body = req.body, params = {}, cloneUrl = '';
+    var body = ctx.request.body, params = {}, cloneUrl = '';
     if (body.payload) {
         params = JSON.parse(body.payload);
     } else {
@@ -147,7 +142,7 @@ exports.receiveWebHooks = function (req, res) {
     //console.log(cloneUrl);
     gitdata.updateWebhook(cloneUrl);
 
-    res.send('receive');
+    ctx.body = 'receive';
 };
 
 var getCategoryList = function (categoryContent, docsPath, groups, rs) {
@@ -203,11 +198,11 @@ var getCategoryCache = function (category, getter) {
     return categoryCache;
 };
 
-exports.search = function (req, res) {
-    var k = (req.query.k || '').trim();
+exports.search = async function (ctx) {
+    var k = (ctx.request.query.k || '').trim();
     var kws = k.replace(/[ ]+/g, ' ').split(' ');
 
-    var category = req.params.category;
+    var category = ctx.params.category;
     var gitPath = gitdata.getGitPath(category), docsPath = gitPath + '/docs';
     var item = gitdata.getItem(category);
 
@@ -217,7 +212,7 @@ exports.search = function (req, res) {
         });
     var arr = [];
     if(k===''){
-        res.render('search.html', formateRender({ list: arr, k: k, item: item }));
+        await ctx.render('search', formateRender({ list: arr, k: k, item: item }));
         return;
     }
     for (var i in categoryList) {
@@ -234,86 +229,67 @@ exports.search = function (req, res) {
         }
     }
 
-    res.render('search.html', formateRender({ list: arr, k: k, item: item }));
+    await ctx.render('search', formateRender({ list: arr, k: k, item: item }));
 };
 
-exports.showImg = function(req, res){
-    var img = req.query.img;
-    res.render('showImg.html', formateRender({ img: img }));
+exports.showImg = async function(ctx){
+    var img = ctx.query.img;
+    await ctx.render('showImg', formateRender({ img: img }));
 };
 
-exports.source = function(req, res){
-    var imgName = req.params.source;
+exports.source = async function(ctx){
+    var imgName = ctx.params.source;
     if(!imgName){
-        res.redirect('/img/default-cover.png');
+        ctx.redirect('/img/default-cover.png');
         return;
     }
     var filePath = path.join(global.rootPath, gitdata.getGitPath('source'), imgName);
     if(!fs.existsSync(filePath)){
-        res.redirect('/img/default-cover.png');
+        ctx.redirect('/img/default-cover.png');
         return;
     }
     var readStream = fs.createReadStream(filePath);
     var fileName = filePath.split(/\\\//).pop();
-    var imgName = req.params.source;
-    res.setHeader("Content-Disposition", "attachment;filename=" + imgName + ";Content-Type:" + gitdata.mime.lookup(imgName));
-    readStream.pipe(res);
+
+    ctx.res.setHeader("Content-Disposition", "attachment;filename=" + imgName + ";Content-Type:" + gitdata.mime.lookup(imgName));
+    ctx.body = readStream;
 };
 
-exports.showDocs = function (req, res) {
-    var k = (req.query.k || '').trim();
-    var category = req.params.category, name = req.params.name;
+exports.showDocs = async function (ctx) {
+    var k = (ctx.request.query.k || '').trim();
+    var category = ctx.params.category, name = ctx.params.name;
     var gitPath = gitdata.getGitPath(category), docsPath = gitPath + '/docs';
     var item = gitdata.getItem(category);
-    async.parallel([
-        function (callback) {
-            var indexPath = path.join(global.rootPath, docsPath + '/indexes.json');
-            fs.readFile(indexPath, 'utf-8', function (err, file) {
-                try {
-                    file = JSON.parse(file);
-                } catch (e) {
-                    file = {};
-                }
-                callback(null, file);
-            });
-        },
-        function (callback) {
-            if (name === 'index') {
-                if (fs.existsSync(path.join(global.rootPath, docsPath + '/' + 'index.md'))) {
-                    name = 'index';
-                } else if (fs.existsSync(path.join(global.rootPath, docsPath + '/' + 'README.md'))) {
-                    name = 'README';
-                } else if (fs.existsSync(path.join(global.rootPath, docsPath + '/' + 'readme.md'))) {
-                    name = 'readme';
-                }
-            }
-            var docPath = path.join(global.rootPath, docsPath + '/' + name + '.md');
-            fs.readFile(docPath, 'utf-8', function (err, file) {
-                file = err ? "" : markedFilter(keywordHighlight(k, file));
-                callback(null, {
-                    fileName: name,
-                    content: file
-                });
-            });
+
+
+    var indexPath = path.join(global.rootPath, docsPath + '/indexes.json');
+    const indexFile = require(indexPath, 'utf-8');
+
+    if (name === 'index') {
+        if (fs.existsSync(path.join(global.rootPath, docsPath + '/' + 'index.md'))) {
+            name = 'index';
+        } else if (fs.existsSync(path.join(global.rootPath, docsPath + '/' + 'README.md'))) {
+            name = 'README';
+        } else if (fs.existsSync(path.join(global.rootPath, docsPath + '/' + 'readme.md'))) {
+            name = 'readme';
         }
-    ],
-        function (err, results) {
-            res.render('docs.html', formateRender({ indexes: results[0], file: results[1], item: item, k: k }));
-        });
+    }
+    var docPath = path.join(global.rootPath, docsPath + '/' + name + '.md');
+    let docFile = fs.readFileSync(docPath, 'utf-8');
+    docFile = markedFilter(keywordHighlight(k, docFile || ''));
+    const docContent = {fileName: name, content: docFile};
+
+    await ctx.render('docs.ejs', formateRender({ indexes: indexFile, file: docContent, item: item, k: k }));
+    
 };
 
-exports.showOthers = function (req, res) {
-    var category = req.params.category, file = req.params[0];
-    /*var filePath = path.join(global.rootPath, gitdata.getGitPath(category) + '/docs/' + file);
-    if(!fs.existsSync(filePath)){
-        res.writeHead(500, { "Content-Type": "text/plain" });
-        res.write(err + "\n");
-        res.end();
-        return;
-    }*/
-    res.redirect('/'+category+'/docs/'+file);
-    /*var readStream = fs.createReadStream(filePath);
-    var fileName = filePath.split(/\\\//).pop();
-    res.writeHead(200, { "Content-Type": gitdata.mime.lookup(fileName) });
-    readStream.pipe(res);*/
+exports.showOthers = async function (ctx) {
+    var category = ctx.params.category, fileName = ctx.params[0];
+    var filePath = path.join(global.rootPath, gitdata.getGitPath('/'+category+'/docs/'+fileName));
+
+    var readStream = fs.createReadStream(filePath);
+
+    ctx.res.setHeader("Content-Disposition", "attachment;filename=" + fileName + ";Content-Type:" + gitdata.mime.lookup(fileName));
+    ctx.body = readStream;
+
 };

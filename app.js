@@ -6,39 +6,28 @@
  * Module dependencies.
  */
 
-var express = require('express')
-    , http = require('http')
-    , path = require('path')
-    , bodyParser = require('body-parser')
-    , cookieParser = require('cookie-parser')
-    , favicon = require('serve-favicon');
+const  http = require('http')
+    , path = require('path');
+
+
+const appConfig = require('./config/config');
 
 global.rootPath = __dirname;
-global.config = require('./config/config.json');
+global.config = appConfig.common;
 global.categoryCache = {};
 
-var app = express();
-
-//设置ejs使用html
-app.engine('html', require('ejs').renderFile);
+const app = require('chestnut-app');
 
 
-//设置html为模板后缀
-app.set('view engine', 'html');
-app.set('views', __dirname + '/views');
-//app.use(favicon(__dirname + '/../exmobi/public/images/favicon.ico'));
+// 定义自己的static目录，默认的公共的static仍然在外层生效
 
-app.use(express.static(path.join(__dirname, './public')));
-app.use(express.static(path.join(__dirname, global.config.basePath)));
-
-
-app.use(bodyParser.json({limit: '10mb'}));
-app.use(bodyParser.urlencoded({limit: '10mb', extended: true }));
-app.use(cookieParser());
+if (process.env.NODE_ENV !== 'production') {
+    app.start(appConfig);
+} else {
+    app.startCluster(appConfig);
+}
 
 
-//路由控制器
-require('./controller/index').set(app);
 
 require('./utils/gitdata').init();
 

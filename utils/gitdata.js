@@ -2,7 +2,7 @@
  * Created by nandy on 2017/2/28.
  */
 var path = require('path'),
-    fs = require("fs");
+    fs = require("fs-extra");
 var basePath = global.config.basePath,
     cacheCategory = global.config.category,
     dataPath = basePath+'/'+cacheCategory,
@@ -32,23 +32,21 @@ var dataCache = {
     list : []
 };
 
-var initDateCache = function(cb){
+var initDateCache = function(){
     var $dataCachePath = path.join(global.rootPath, dataCachePath);
     if(fs.existsSync($dataCachePath)){
         fs.readFile($dataCachePath, 'utf-8', function(err, file){
             dataCache = err?dataCache:JSON.parse(file);
-            saveDataCache(cb);
+            saveDataCache();
         });
     }else{
-        saveDataCache(cb);
+        saveDataCache();
     }
 };
 
-var saveDataCache = function(cb){
+var saveDataCache = function(){
     var $dataCachePath = path.join(global.rootPath, dataCachePath);
-    fs.writeFile($dataCachePath, JSON.stringify(dataCache),function(err){
-        cb&&cb(err);
-    });
+    fs.writeFileSync($dataCachePath, JSON.stringify(dataCache));
 };
 
 var itemModal = {
@@ -62,18 +60,16 @@ var itemModal = {
 exports.init = function(opts){
 
     if(fs.existsSync(path.join(global.rootPath, dataPath))){
-        initDateCache(function(){
-            global.config.isInit = true;
-        });
+        initDateCache();
+        global.config.isInit = true;
     }else{
         var forInit = function(){
             exec("cd "+basePath+" && mkdir " + cacheCategory + " && mkdir source", function(err, stdout, stderr) {
                 if(err){
                     console.log(arguments);
                 }else{
-                    initDateCache(function(){
-                        global.config.isInit = true;
-                    });
+                    initDateCache();
+                    global.config.isInit = true;
                 }
             });
         };
@@ -81,9 +77,8 @@ exports.init = function(opts){
         if(fs.existsSync($basePath)){
             forInit();
         }else{
-            fs.mkdir($basePath, function(err){
-                if(!err) forInit();
-            });
+            fs.mkdirSync($basePath);
+            forInit();
         }
 
     }
@@ -99,16 +94,16 @@ var isUnique = function(infoObj){
     return true;
 };
 
-var addList = function(infoObj, cb){
+var addList = function(infoObj){
     infoObj.git_id = createId();
     dataCache.list = dataCache.list||[];
     dataCache.list.push(infoObj);
-    saveDataCache(cb);
+    saveDataCache();
 };
 
-var delList = function(index, cb){
+var delList = function(index){
     dataCache.list.splice(index,1);
-    saveDataCache(cb);
+    saveDataCache();
 };
 
 var getItem = exports.getItem = function(id){
@@ -156,38 +151,47 @@ var mime = exports.mime = {
     }
 };
 
-exports.getList = function(cb){
-    initDateCache(function(){
-        cb(dataCache.list||[]);
-    });
+exports.getList = function(){
+    initDateCache();
+    return dataCache.list||[];
 };
 
-exports.saveGit = function(infoObj, cb){
-    if(isUnique(infoObj)){
-        var gitPath = getGitPath(infoObj.category);//https://github.com/nandy007/agile-vm.git
-        exec("rm -rf " + gitPath + " && git clone " + infoObj.url + " " + gitPath, function(err, stdout, stderr) {
-            if(err){
-                cb(arguments);
-            }else{
-                addList(infoObj, cb);
-            }
-        });
-    }else{
-        cb(null, false);
-    }
-};
+exports.saveGit = function(infoObj){
 
-exports.delGit = function(git_id, cb){
-    var item = getItem(git_id)||{};
-    var category = item.category;
-    var gitPath = getGitPath(category);
-    exec('rm -rf '+gitPath, function(err){
-        if(err){
-            cb(arguments);
+    return new Promise(function(resolve, reject){
+        if(isUnique(infoObj)){
+            var gitPath = getGitPath(infoObj.category);//https://github.com/nandy007/agile-vm.git
+            exec("rm -rf " + gitPath + " && git clone " + infoObj.url + " " + gitPath, function(err, stdout, stderr) {
+                if(err){
+                    resolve(err);
+                }else{
+                    addList(infoObj);
+                    resolve();
+                }
+            });
         }else{
-            delList(item.index, cb);
+            resolve();
         }
     });
+
+};
+
+exports.delGit = function(git_id){
+
+
+    var item = getItem(git_id)||{};
+    var category = item.category;
+    var gitPath = path.join(global.rootPath, getGitPath(category));
+
+    try{
+        fs.removeSync(gitPath);
+    }catch(e){
+        console.error(e);
+    }
+    
+    delList(item.index);
+
+
 };
 
 exports.updateWebhook = function(cloneUrl){
