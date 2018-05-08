@@ -287,6 +287,11 @@ exports.showOthers = async function (ctx) {
     var category = ctx.params.category, fileName = ctx.params[0];
     var filePath = path.join(global.rootPath, gitdata.getGitPath('/'+category+'/docs/'+fileName));
 
+    if(!fs.existsSync(filePath)){
+        ctx.body = '';
+        return;
+    }
+
     var readStream = fs.createReadStream(filePath);
 
     ctx.res.setHeader("Content-Disposition", "attachment;filename=" + fileName + ";Content-Type:" + gitdata.mime.lookup(fileName));
