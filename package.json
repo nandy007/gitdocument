@@ -1,6 +1,6 @@
 {
   "name": "gitdocument",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "git文档发布服务",
   "main": "bin/www_gitdocument",
   "scripts": {
@@ -22,8 +22,8 @@
   },
   "homepage": "https://github.com/nandy007/gitdocument",
   "dependencies": {
-    "chestnut-app": "^0.2.5",
-    "chestnut-router": "^0.2.3",
+    "chestnut-app": "^0.2.7",
+    "chestnut-router": "^0.2.4",
     "chestnut-session": "^0.2.4",
     "chestnut-utils": "^0.2.3",
     "connect-multiparty": "1.2.5",

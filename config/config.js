@@ -2,6 +2,7 @@
 const path = require('path');
 
 module.exports = {
+    projectPath : "",
     port: 7700,                                      //按需修改
     rootPath: path.join(__dirname, '../'),
     middleware: {
@@ -15,7 +16,6 @@ module.exports = {
         multiParser: { dest: path.join(__dirname, '../public/uploads/') }                                      //按需修改
     },
     common: {
-        "projectPath" : "",
         "category" : "gitdocument",
         "isInit" : false,
         "basePath": "../gits",
