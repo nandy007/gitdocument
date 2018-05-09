@@ -30,9 +30,9 @@
 
 > [http://localhost:7700/index.html](http://localhost:7700/index.html)（服务首页）
 
-> [http://localhost:7700/mng-main[password].html](http://localhost:7700/mng-main.html)（管理页面）
+> [http://localhost:7700/mng/main[password].html](http://localhost:7700/mng/main.html)（管理页面）
 
-其中[passeord]为config.json文件中配置的password的值，注意不要加[]，比如如果password为空串则访问地址为http://localhost:7700/mng-main.html
+其中[passeord]为config.json文件中配置的password的值，注意不要加[]，比如如果password为空串则访问地址为http://localhost:7700/mng/main.html
 
 
 
