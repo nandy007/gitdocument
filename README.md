@@ -20,9 +20,9 @@
 
 第三步：
 
-> 修改工程目录下的config/config.json文件，修改password的值
+> 修改工程目录下的config/config.json文件，修改password的值， 并启动
 
-> node ./bin/www_gitdocument
+> npm run start
 
 第四步：
 
