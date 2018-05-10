@@ -155,11 +155,11 @@
                         $('#controller li').toggle();
                     },
                     goTop: function () {
-                        $('body').animate({ scrollTop: 0 }, 'slow');
+                        $('body,html').animate({ scrollTop: 0 }, 'slow');
                     },
                     goTo: function (index) {
                         var top = $('#cid_' + index).offset().top - 100;
-                        $('body').animate({ scrollTop: top }, 'slow');
+                        $('body,html').animate({ scrollTop: top }, 'slow');
                     },
                     isShow: false
                 };
@@ -169,7 +169,8 @@
                 $('#content a[href^="#"]').on('click', function () {
                     try {
                         var top = $($(this).attr('href')).offset().top - 100;
-                        $('body').animate({ scrollTop: top }, 'slow');
+                        console.log($($(this).attr('href')).offset(), top);
+                        $('body,html').animate({ scrollTop: top }, 'slow');
                     } catch (e) { }
 
                     return false;
