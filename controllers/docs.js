@@ -275,8 +275,11 @@ exports.showDocs = async function (ctx) {
         }
     }
     var docPath = path.join(global.rootPath, docsPath + '/' + name + '.md');
-    let docFile = fs.readFileSync(docPath, 'utf-8');
-    docFile = markedFilter(keywordHighlight(k, docFile || ''));
+    let docFile = '';
+    if(fs.existsSync(docPath)){
+        docFile = fs.readFileSync(docPath, 'utf-8');
+        docFile = markedFilter(keywordHighlight(k, docFile || ''));
+    }
     const docContent = {fileName: name, content: docFile};
 
     await ctx.render('docs.ejs', formateRender({ indexes: indexFile, file: docContent, item: item, k: k }));
