@@ -112,7 +112,9 @@ exports.saveGit = async function (ctx) {
     }
     var filePath = path.join(global.rootPath, gitdata.getGitPath('source'), category+'.png');
     fs.copyFileSync(coverPath, filePath);
+    
     const rs = await gitdata.saveGit(ctx.request.body);
+
     if(rs){
         ctx.body = { result: 'error' };
     }else{

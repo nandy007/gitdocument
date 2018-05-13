@@ -18,6 +18,10 @@ global.categoryCache = {};
 
 const app = require('chestnut-app');
 
+const router = require('chestnut-router');
+const filters = require('./filters/router.filter');
+router.addFilters(filters);
+
 
 // 定义自己的static目录，默认的公共的static仍然在外层生效
 

@@ -160,8 +160,9 @@ exports.saveGit = function(infoObj){
 
     return new Promise(function(resolve, reject){
         if(isUnique(infoObj)){
-            var gitPath = getGitPath(infoObj.category);//https://github.com/nandy007/agile-vm.git
-            exec("rm -rf " + gitPath + " && git clone " + infoObj.url + " " + gitPath, function(err, stdout, stderr) {
+            var gitPath = getGitPath(infoObj.category);//https://github.com/nandy007/agile-ce.git
+            fs.removeSync(gitPath);
+            exec("git clone " + infoObj.url + " " + gitPath, function(err, stdout, stderr) {
                 if(err){
                     resolve(err);
                 }else{

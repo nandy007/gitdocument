@@ -30,7 +30,7 @@
                         list: __list,
                         showList: __list.length,
                         doDel: function (git_id) {
-                            $.get('mng-delGit?git_id=' + git_id, function (data) {
+                            $.get('delGit?git_id=' + git_id, function (data) {
                                 location.href = location.href;
                             });
                         },
@@ -71,7 +71,7 @@
             <div id="navbar" class="collapse navbar-collapse">
                 <ul class="nav navbar-nav">
                     <li><a href="../index.html">首页</a></li>
-                    <li class="active"><a href="mng.html">管理</a></li>
+                    <li class="active"><a>管理</a></li>
                 </ul>
             </div>
             <!--/.nav-collapse -->
@@ -106,7 +106,7 @@
                         <td>{{item.url}}</td>
                         <td>{{item.category}}</td>
                         <td>
-                            <a v-bind:href="'/'+item.category+'/index.html'" target="_blank" class="btn btn-default">文档</a>
+                            <a v-bind:href="'../'+item.category+'/index.html'" target="_blank" class="btn btn-default">文档</a>
                             <button type="button" v-on:click="doDel(item.git_id)" class="btn btn-default">删除</button>
                         </td>
                     </tr>

@@ -17,7 +17,7 @@ function getFilesObj(files){
 // 此规则需要自己定义
 const rules = {
     default: function (ctx) {
-        console.log(111);
+        
         const hasData = !!(ctx.session && ctx.session.userinfo);
         let rs = hasData;
 
