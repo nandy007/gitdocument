@@ -12,7 +12,7 @@ const  http = require('http')
 
 const appConfig = require('./config/config');
 
-appConfig.common.projectPath = appConfig.projectPath;
+appConfig.common.projectPath = appConfig.projectPath || '';
 
 global.rootPath = __dirname;
 global.config = appConfig.common;
