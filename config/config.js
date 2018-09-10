@@ -21,8 +21,8 @@ module.exports = {
         "basePath": "../gits",
         "password" : "",
         "maxCache" : 10,
-        "copyright" : "Copyright © 2018 南京鼎软信息发展有限公司版权所有",
-        "url" : "https://www.dsoftware.cn",
+        "copyright" : "",
+        "url" : "",
         "beian": ""
     }
 };
