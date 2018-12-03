@@ -35,7 +35,7 @@
 其中[passeord]为config.json文件中配置的password的值，注意不要加[]，比如如果password为空串则访问地址为http://localhost:7700/mng/main.html
 
 
-#其他注意事项：
+# 其他注意事项：
 项目中main.html页面可以添加的github项目目前需要满足一定要求，否则无法在主页显示：
 
 - 项目目录下要有docs目录
