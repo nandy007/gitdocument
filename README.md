@@ -35,4 +35,49 @@
 其中[passeord]为config.json文件中配置的password的值，注意不要加[]，比如如果password为空串则访问地址为http://localhost:7700/mng/main.html
 
 
+# 其他注意事项：
+项目中main.html页面可以添加的github项目目前需要满足一定要求，否则无法在主页显示：
+
+- 项目目录下要有docs目录
+- docs目录下存在README.md(可选)
+- docs目录下有indexex.json文件：文件内容为整个文档的目录结构，格式如下：
+```json
+			{
+			"contains": [
+					{
+						"group": "GIS学习资料",
+						"contains": [
+							{
+								"subject": "GIS学习资料",
+								"mdlink": "GIS学习资料"
+							}
+						 ],
+						 "contains": [
+							{
+								"subject": "GIS知识笔记",
+								"mdlink": "GIS知识笔记"
+							}
+						 ]
+					},
+					{
+						"group": "GIS学习资料1",
+							"contains": [
+								{
+									"subject": "GIS学习资料1",
+									"mdlink": "GIS学习资料1"
+								}
+							 ],
+							 "contains": [
+								{
+									"subject": "GIS知识笔记1",
+									"mdlink": "GIS知识笔记1"
+								}
+							 ]
+					}
+				]
+			}
+```
+
+
+
 
