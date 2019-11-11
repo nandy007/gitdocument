@@ -42,6 +42,7 @@
                     $('#container').render(obj);
 
                     var doLoad = function(){
+                        if(!$('#uploadFrame').attr('src')) return;
                         if($('#addModal').hasClass('in')){
                             $('#addModal').modal('toggle');
                             obj.clearForm(obj.forms);
