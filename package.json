@@ -28,7 +28,7 @@
     "chestnut-utils": "^0.2.3",
     "connect-multiparty": "1.2.5",
     "fs-extra": "^6.0.0",
-    "marked": "0.3.6",
+    "marked": "0.7.0",
     "supervisor": "^0.12.0"
   }
 }
